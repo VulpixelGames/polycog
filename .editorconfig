@@ -1,0 +1,21 @@
+root = true
+
+[*]
+# UTF-8 with no BOM is typically standard.
+charset = utf-8
+# LF, always. Gives better portability.
+end_of_line = lf
+# Set number of columns to tab width.
+indent_size = tab
+# Accessibility: https://adamtuttle.codes/blog/2021/tabs-vs-spaces-its-an-accessibility-issue/
+indent_style = tab
+# Unix relic. Most IDEs do this anyway.
+insert_final_newline = true
+max_line_length = 120
+# Set for continuation indent size. Users may override locally.
+tab_width = 4
+# Gets rid of unnecessary indentation, and IJ ignores this anyway.
+trim_trailing_whitespace = true
+
+[*.json]
+tab_width = 2

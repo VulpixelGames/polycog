@@ -1,0 +1,21 @@
+# Misc
+.env
+
+# VSCode
+/.vscode
+
+# Rust
+/target
+
+# MacOS
+.DS_Store
+
+# SPIR-V
+*.spv
+
+
+# Added by cargo
+#
+# already existing elements were commented out
+
+#/target

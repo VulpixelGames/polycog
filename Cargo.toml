@@ -1,0 +1,27 @@
+[package]
+name = "polycog"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Housekeeping
+log = "0.4"
+colored = "3"
+thiserror = "2"
+anyhow = "1"
+
+# Utilities
+hecs = "0.10"
+glam = "0.29.0"
+clap = "4"
+
+# Rendering
+vulkano = "0.35"
+vulkano-shaders = "0.35"
+vulkano-taskgraph = "0.35"
+vulkano-util = "0.35"
+winit = "0.30"
+
+[build-dependencies]
+# Housekeeping
+anyhow = "1"
