@@ -3,7 +3,9 @@ use vulkano::{
 	VulkanLibrary,
 };
 
-pub fn init() -> anyhow::Result<()> {
+use crate::error;
+
+pub fn init() -> Result<(), error::InitError> {
 	let library = VulkanLibrary::new()?;
 	let instance = Instance::new(
 		library,
