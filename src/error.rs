@@ -39,12 +39,22 @@ pub enum GameError {
 	Unknown,
 	#[error("error in initialization: {0}")]
 	Init(#[from] InitError),
+	#[error("event loop: {0}")]
+	EventLoop(#[from] winit::error::EventLoopError),
 }
 
 #[derive(Error, Debug)]
 pub enum InitError {
-	#[error("Vulkan is missing or unsupported; check to see if your system supports Vulkan")]
+	#[error("Vulkan is missing or unsupported; check to see if your system supports Vulkan: {0}")]
 	VulkanLoad(#[from] vulkano::LoadingError),
 	#[error("rendering: {0}")]
 	Rendering(#[from] vulkano::Validated<VulkanError>),
+	#[error("event loop: {0}")]
+	EventLoop(#[from] winit::error::EventLoopError),
+	#[error("OS error (windowing): {0}")]
+	WinitOsError(#[from] winit::error::OsError),
+	#[error("window handle error: {0}")]
+	WinitHandleError(#[from] winit::raw_window_handle::HandleError),
+	#[error("{0}")]
+	VulkanoFromWindow(#[from] vulkano::swapchain::FromWindowError),
 }

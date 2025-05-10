@@ -1,19 +1,37 @@
+use std::sync::Arc;
+
 use vulkano::{
-	instance::{Instance, InstanceCreateFlags, InstanceCreateInfo},
 	VulkanLibrary,
+	instance::{Instance, InstanceCreateFlags, InstanceCreateInfo},
+	swapchain::Surface,
 };
+use winit::window::Window;
 
-use crate::error;
+use crate::{constants, error};
 
-pub fn init() -> Result<(), error::InitError> {
-	let library = VulkanLibrary::new()?;
-	let instance = Instance::new(
-		library,
+/// Rendering initialization called upon first Resumed event in the event loop.
+/// See [crate::event::App]
+pub fn init(
+	window: Arc<Window>,
+	event_loop: &winit::event_loop::ActiveEventLoop,
+) -> Result<Arc<Surface>, error::InitError> {
+	// Initialize Vulkan
+	let vk_library = VulkanLibrary::new()?;
+	let required_extensions = Surface::required_extensions(&event_loop)?;
+	let vk_instance = Instance::new(
+		vk_library,
 		InstanceCreateInfo {
 			flags: InstanceCreateFlags::empty(),
+			application_name: Some(constants::NAME.to_string()),
+			enabled_extensions: required_extensions,
 			..Default::default()
 		},
 	)?;
+	let vk_surface = Surface::from_window(vk_instance.clone(), window.clone())?;
 
-	Ok(())
+	Ok(vk_surface)
+}
+
+pub struct RenderInstance {
+	pub vk_instance: Arc<Instance>,
 }
