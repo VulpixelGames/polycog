@@ -9,6 +9,11 @@ use winit::window::Window;
 
 use crate::{constants, error};
 
+pub struct RenderData {
+	pub window: Arc<Window>,
+	pub surface: Arc<Surface>,
+}
+
 /// Rendering initialization called upon first Resumed event in the event loop.
 /// See [crate::event::App]
 pub fn init(
@@ -32,6 +37,3 @@ pub fn init(
 	Ok(vk_surface)
 }
 
-pub struct RenderInstance {
-	pub vk_instance: Arc<Instance>,
-}

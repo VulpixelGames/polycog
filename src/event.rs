@@ -1,18 +1,12 @@
 use std::{panic::panic_any, sync::Arc};
 
-use vulkano::swapchain::Surface;
 use winit::{
 	application::ApplicationHandler,
 	event::WindowEvent,
-	window::{Window, WindowAttributes},
+	window::WindowAttributes,
 };
 
-use crate::{client::rendering, error};
-
-pub struct RenderData {
-	pub window: Arc<Window>,
-	pub vk_surface: Arc<Surface>,
-}
+use crate::{client::rendering::{self, RenderData}, error};
 
 /// The game's event loop handler.
 pub struct App {
@@ -47,16 +41,14 @@ impl ApplicationHandler for App {
 			let result = event_loop.create_window(window_attributes.clone());
 			match result {
 				Ok(window_ok) => window = Some(Arc::new(window_ok)),
-				Err(error) => {
-					panic_any(error::GameError::Init(error.into()));
-				},
+				Err(error) => { panic_any(error::GameError::Init(error.into())); },
 			}
 
 			// Rendering initialization
-			let vk_surface;
+			let surface;
 			let result = rendering::init(window.clone().unwrap(), event_loop);
 			match result {
-				Ok(vk_surface_ok) => vk_surface = Some(vk_surface_ok),
+				Ok(surface_ok) => surface = Some(surface_ok),
 				Err(error) => {
 					panic_any(error::GameError::Init(error));
 				},
@@ -64,7 +56,7 @@ impl ApplicationHandler for App {
 
 			self.render_data = Some(RenderData {
 				window: window.unwrap(),
-				vk_surface: vk_surface.unwrap(),
+				surface: surface.unwrap(),
 			});
 		}
 	}
