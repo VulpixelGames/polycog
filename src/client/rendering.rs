@@ -23,7 +23,7 @@ pub fn init(
 	// Initialize Vulkan
 	let vk_library = VulkanLibrary::new()?;
 	let required_extensions = Surface::required_extensions(&event_loop)?;
-	let vk_instance = Instance::new(
+	let instance = Instance::new(
 		vk_library,
 		InstanceCreateInfo {
 			flags: InstanceCreateFlags::empty(),
@@ -32,8 +32,8 @@ pub fn init(
 			..Default::default()
 		},
 	)?;
-	let vk_surface = Surface::from_window(vk_instance.clone(), window.clone())?;
+	let surface = Surface::from_window(instance.clone(), window.clone())?;
 
-	Ok(vk_surface)
+	Ok(surface)
 }
 
