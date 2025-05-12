@@ -5,11 +5,11 @@ mod event;
 
 use std::panic::panic_any;
 
-pub use ::log::{debug, error, info, trace, warn};
+pub use ::log::{debug, error, info, trace, warn}; // easy logging anywhere
 use winit::{
 	event_loop::{ControlFlow, EventLoop},
 	window::WindowAttributes,
-}; // easy logging anywhere
+};
 
 fn handled_main() -> Result<(), error::GameError> {
 	// Base initialization
