@@ -1,7 +1,6 @@
-use std::panic::PanicHookInfo;
+use std::{backtrace::Backtrace, panic::PanicHookInfo};
 
 use thiserror::Error;
-use vulkano::VulkanError;
 
 use crate::constants;
 
@@ -23,11 +22,14 @@ pub fn set_panic_hook() {
 			GameError::Unknown.to_string()
 		};
 
+		let backtrace = Backtrace::capture();
+
 		if let Some(location) = info.location() {
-			println!("[{}:{}] {payload_msg}", location.file(), location.line())
+			println!("[{}:{}] {payload_msg}", location.file(), location.line());
 		} else {
 			println!("{info}");
 		}
+		println!("{backtrace}");
 	}));
 }
 
@@ -39,16 +41,36 @@ pub enum GameError {
 	Unknown,
 	#[error("error in initialization: {0}")]
 	Init(#[from] InitError),
+	#[error("error while rendering: {0}")]
+	Render(#[from] RenderError),
 	#[error("event loop: {0}")]
 	EventLoop(#[from] winit::error::EventLoopError),
 }
 
 #[derive(Error, Debug)]
 pub enum InitError {
+	#[error("{0}")]
+	RenderError(#[from] RenderError),
 	#[error("Vulkan is missing or unsupported; check to see if your system supports Vulkan: {0}")]
 	VulkanLoad(#[from] vulkano::LoadingError),
-	#[error("rendering: {0}")]
-	Rendering(#[from] vulkano::Validated<VulkanError>),
+	#[error("Vulkan: {0:?}")]
+	Vulkan(#[from] vulkano::Validated<vulkano::VulkanError>),
+	#[error("Vulkan: {0:?}")]
+	VulkanUnvalidated(#[from] vulkano::VulkanError),
+	#[error("allocating Vulkan image: {0:?}")]
+	AllocateImage(#[from] vulkano::Validated<vulkano::image::AllocateImageError>),
+	#[error("allocating Vulkan buffer: {0:?}")]
+	AllocateBuffer(#[from] vulkano::Validated<vulkano::buffer::AllocateBufferError>),
+	#[error("Vulkan validation error: {0}")]
+	Validation(#[from] Box<vulkano::ValidationError>),
+	#[error("creating IntoPipelineLayoutCreateInfo: {0}")]
+	IntoPipelineLayoutCreateInfo(
+		#[from] vulkano::pipeline::layout::IntoPipelineLayoutCreateInfoError,
+	),
+	#[error("no suitable physical graphics device (\"GPU\") found")]
+	NoSuitableDevice,
+	#[error("no capability: {0}")]
+	NoCapability(String),
 	#[error("event loop: {0}")]
 	EventLoop(#[from] winit::error::EventLoopError),
 	#[error("OS error (windowing): {0}")]
@@ -57,4 +79,18 @@ pub enum InitError {
 	WinitHandleError(#[from] winit::raw_window_handle::HandleError),
 	#[error("{0}")]
 	VulkanoFromWindow(#[from] vulkano::swapchain::FromWindowError),
+}
+
+#[derive(Error, Debug)]
+pub enum RenderError {
+	#[error("Vulkan: {0:?}")]
+	Vulkan(#[from] vulkano::Validated<vulkano::VulkanError>),
+	#[error("Vulkan: {0}")]
+	VulkanUnvalidated(#[from] vulkano::VulkanError),
+	#[error("Vulkan validation error: {0}")]
+	Validation(#[from] Box<vulkano::ValidationError>),
+	#[error("allocating Vulkan buffer: {0:?}")]
+	AllocateBuffer(#[from] vulkano::Validated<vulkano::buffer::AllocateBufferError>),
+	#[error("Vulkan command buffer execution: {0}")]
+	CommandBufferExec(#[from] vulkano::command_buffer::CommandBufferExecError),
 }

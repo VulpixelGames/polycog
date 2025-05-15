@@ -14,6 +14,7 @@ use winit::{
 fn handled_main() -> Result<(), error::GameError> {
 	// Base initialization
 	error::set_panic_hook();
+	simple_logger::init_with_level(log::Level::Info).unwrap();
 
 	// Event loop initialization
 	let result: Result<_, error::InitError> = (|| {

@@ -1,12 +1,11 @@
 use std::{panic::panic_any, sync::Arc};
 
-use winit::{
-	application::ApplicationHandler,
-	event::WindowEvent,
-	window::WindowAttributes,
-};
+use winit::{application::ApplicationHandler, event::WindowEvent, window::WindowAttributes};
 
-use crate::{client::rendering::{self, RenderData}, error};
+use crate::{
+	client::rendering::{self, RenderData},
+	error,
+};
 
 /// The game's event loop handler.
 pub struct App {
@@ -37,27 +36,12 @@ impl ApplicationHandler for App {
 	fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
 		if let Some(window_attributes) = self.window_attributes.as_ref() {
 			// Window initialization
-			let window;
-			let result = event_loop.create_window(window_attributes.clone());
-			match result {
-				Ok(window_ok) => window = Some(Arc::new(window_ok)),
-				Err(error) => { panic_any(error::GameError::Init(error.into())); },
-			}
+			let window = event_loop.create_window(window_attributes.clone()).unwrap();
 
 			// Rendering initialization
-			let surface;
-			let result = rendering::init(window.clone().unwrap(), event_loop);
-			match result {
-				Ok(surface_ok) => surface = Some(surface_ok),
-				Err(error) => {
-					panic_any(error::GameError::Init(error));
-				},
-			}
+			let render_data = rendering::init(Arc::new(window), event_loop).unwrap();
 
-			self.render_data = Some(RenderData {
-				window: window.unwrap(),
-				surface: surface.unwrap(),
-			});
+			self.render_data = Some(render_data);
 		}
 	}
 
@@ -71,7 +55,17 @@ impl ApplicationHandler for App {
 			WindowEvent::CloseRequested => {
 				event_loop.exit();
 			},
-			WindowEvent::RedrawRequested => {},
+			WindowEvent::Resized(_) => {
+				if let Some(render_data) = &mut self.render_data {
+					render_data.recreate_swapchain = true;
+				}
+			},
+			WindowEvent::RedrawRequested => {
+				if let Some(render_data) = &mut self.render_data {
+					rendering::render(render_data, event_loop).unwrap();
+					render_data.window.request_redraw();
+				}
+			},
 			_ => (),
 		}
 	}
