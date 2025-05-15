@@ -13,7 +13,7 @@ use vulkano::{
 		QueueFlags, physical::PhysicalDeviceType,
 	},
 	image::{Image, ImageLayout, ImageUsage, view::ImageView},
-	instance::{Instance, InstanceCreateFlags, InstanceCreateInfo, InstanceExtensions},
+	instance::{Instance, InstanceCreateFlags, InstanceCreateInfo},
 	memory::allocator::{AllocationCreateInfo, MemoryTypeFilter, StandardMemoryAllocator},
 	pipeline::{
 		DynamicState, GraphicsPipeline, PipelineLayout, PipelineShaderStageCreateInfo,
@@ -76,11 +76,7 @@ pub fn init(
 ) -> Result<RenderData, error::InitError> {
 	// Initialize Vulkan
 	let vk_library = VulkanLibrary::new()?;
-	let window_extensions = Surface::required_extensions(&event_loop)?
-		| InstanceExtensions {
-			khr_wayland_surface: true,
-			..Default::default()
-		};
+	let window_extensions = Surface::required_extensions(&event_loop)?;
 	let instance = Instance::new(
 		vk_library,
 		InstanceCreateInfo {
