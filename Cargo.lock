@@ -344,9 +344,9 @@ dependencies = [
 [[package]]
 name = "concurrent-slotmap"
 version = "0.1.0-alpha.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b986749ea6185190813567c2a78cab7d1fccab01589470a05ebc829afd85ae6c"
+source = "git+https://github.com/vulkano-rs/concurrent-slotmap?rev=6c328e2857f8461c177046414962ee6c7784f61c#6c328e2857f8461c177046414962ee6c7784f61c"
 dependencies = [
+ "thread_local",
  "virtual-buffer",
 ]
 
@@ -1680,9 +1680,8 @@ dependencies = [
 
 [[package]]
 name = "vulkano"
-version = "0.35.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08840c2b51759a6f88f26f5ea378bc8b5c199a5b4760ddda292304be087249c4"
+version = "0.35.0"
+source = "git+https://github.com/vulkano-rs/vulkano.git?rev=3b2b6441177491f69111981a86fa998a3bff4abb#3b2b6441177491f69111981a86fa998a3bff4abb"
 dependencies = [
  "ash",
  "bytemuck",
@@ -1693,7 +1692,6 @@ dependencies = [
  "indexmap",
  "libloading",
  "nom",
- "once_cell",
  "parking_lot",
  "proc-macro2",
  "quote",
@@ -1713,8 +1711,7 @@ dependencies = [
 [[package]]
 name = "vulkano-macros"
 version = "0.35.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1dc929c42c9336fd082079ac3ea30126e4a0dfe36fd2e2b3581303f7d140d20f"
+source = "git+https://github.com/vulkano-rs/vulkano.git?rev=3b2b6441177491f69111981a86fa998a3bff4abb#3b2b6441177491f69111981a86fa998a3bff4abb"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -1725,8 +1722,7 @@ dependencies = [
 [[package]]
 name = "vulkano-shaders"
 version = "0.35.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3bf501461be7cef2893c0e62c50945add9763cc482051d29053f6157089d5ea9"
+source = "git+https://github.com/vulkano-rs/vulkano.git?rev=3b2b6441177491f69111981a86fa998a3bff4abb#3b2b6441177491f69111981a86fa998a3bff4abb"
 dependencies = [
  "foldhash",
  "heck",
@@ -1739,11 +1735,11 @@ dependencies = [
 
 [[package]]
 name = "vulkano-taskgraph"
-version = "0.35.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "316480b7b02d8a98a3965e4d2f21129e6f1749eb1e126db108daa8bede994957"
+version = "0.35.0"
+source = "git+https://github.com/vulkano-rs/vulkano.git?rev=3b2b6441177491f69111981a86fa998a3bff4abb#3b2b6441177491f69111981a86fa998a3bff4abb"
 dependencies = [
  "ash",
+ "bytemuck",
  "concurrent-slotmap",
  "foldhash",
  "parking_lot",
@@ -1755,8 +1751,7 @@ dependencies = [
 [[package]]
 name = "vulkano-util"
 version = "0.35.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e25dc54fd5e14a0e01c7282f9b5d9c6e133745e1df3228b0352366e34c83bb6b"
+source = "git+https://github.com/vulkano-rs/vulkano.git?rev=3b2b6441177491f69111981a86fa998a3bff4abb#3b2b6441177491f69111981a86fa998a3bff4abb"
 dependencies = [
  "foldhash",
  "vulkano",

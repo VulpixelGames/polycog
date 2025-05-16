@@ -26,7 +26,7 @@ fn handled_main() -> Result<(), error::GameError> {
 		let window_attributes = WindowAttributes::default().with_title(constants::NAME);
 
 		Ok((
-			event::App::new_windowed(window_attributes.clone()),
+			event::App::new_windowed(window_attributes.clone(), &event_loop),
 			event_loop,
 		))
 	})();

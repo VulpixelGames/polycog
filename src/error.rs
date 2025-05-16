@@ -2,7 +2,7 @@ use std::{backtrace::Backtrace, panic::PanicHookInfo};
 
 use thiserror::Error;
 
-use crate::constants;
+use crate::{client::rendering::RenderContext, constants};
 
 /// Sets the default panic hook to display a user-friendly UI box.
 pub fn set_panic_hook() {
@@ -79,6 +79,14 @@ pub enum InitError {
 	WinitHandleError(#[from] winit::raw_window_handle::HandleError),
 	#[error("{0}")]
 	VulkanoFromWindow(#[from] vulkano::swapchain::FromWindowError),
+	#[error("Vulkan task graph compile: {0}")]
+	TaskGraphCompile(#[from] vulkano_taskgraph::graph::CompileError<RenderContext>),
+	#[error("Vulkan resource does not exist: {0}")]
+	InvalidSlot(#[from] vulkano_taskgraph::InvalidSlotError),
+	#[error("Vulkan task graph execute: {0} ({0:?})")]
+	TaskGraphExecute(#[from] vulkano_taskgraph::graph::ExecuteError),
+	#[error("Vulkan task graph: {0}")]
+	TaskGraph(#[from] vulkano_taskgraph::graph::TaskGraphError),
 }
 
 #[derive(Error, Debug)]
@@ -93,4 +101,10 @@ pub enum RenderError {
 	AllocateBuffer(#[from] vulkano::Validated<vulkano::buffer::AllocateBufferError>),
 	#[error("Vulkan command buffer execution: {0}")]
 	CommandBufferExec(#[from] vulkano::command_buffer::CommandBufferExecError),
+	#[error("allocating Vulkan image: {0:?}")]
+	AllocateImage(#[from] vulkano::Validated<vulkano::image::AllocateImageError>),
+	#[error("Vulkan resource does not exist: {0}")]
+	InvalidSlot(#[from] vulkano_taskgraph::InvalidSlotError),
+	#[error("Vulkan task graph execute: {0} ({0:?})")]
+	TaskGraphExecute(#[from] vulkano_taskgraph::graph::ExecuteError),
 }

@@ -17,10 +17,10 @@ glam = "0.29.0"
 clap = "4"
 
 # Rendering
-vulkano = "0.35"
-vulkano-shaders = "0.35"
-vulkano-taskgraph = "0.35"
-vulkano-util = "0.35"
+vulkano = { git = "https://github.com/vulkano-rs/vulkano.git", rev = "3b2b6441177491f69111981a86fa998a3bff4abb" }
+vulkano-shaders = { git = "https://github.com/vulkano-rs/vulkano.git", rev = "3b2b6441177491f69111981a86fa998a3bff4abb" }
+vulkano-taskgraph = { git = "https://github.com/vulkano-rs/vulkano.git", rev = "3b2b6441177491f69111981a86fa998a3bff4abb" }
+vulkano-util = { git = "https://github.com/vulkano-rs/vulkano.git", rev = "3b2b6441177491f69111981a86fa998a3bff4abb" }
 winit = "0.30"
 
 [build-dependencies]
